@@ -24,7 +24,21 @@ namespace ClientWeb
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/Site.css",
+                      "~/Content/Theme.css"));
+
+            bundles.Add(new ScriptBundle("~/Content/js").Include(
+                       "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                       "~/Content/js/bootstrap.js",
+                       "~/Content/js/jquery.smartmenus.js",
+                       "~/Content/js/jquery.smartmenus.bootstrap.js",
+                       "~/Content/js/sequence.js",
+                       "~/Content/js/sequence-theme.modern-slide-in.js",
+                       "~/Content/js/jquery.simpleGallery.js",
+                       "~/Content/js/jquery.simpleLens.js",
+                       "~/Content/js/slick.js",
+                       "~/Content/js/nouislider.js",
+                       "~/Content/js/custom.js"));
         }
     }
 }

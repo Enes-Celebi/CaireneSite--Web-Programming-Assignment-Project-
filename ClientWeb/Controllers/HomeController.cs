@@ -1,4 +1,5 @@
 ﻿using System;
+using ClientWeb.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +9,22 @@ namespace ClientWeb.Controllers
 {
     public class HomeController : Controller
     {
+        DBEntities db = new DBEntities();
+
+        // GET: Home
         public ActionResult Index()
         {
-            return View();
-        }
+            ViewBag.MenProduct = db.Products.Where(x => x.Category.Name.Equals("Men")).ToList();
+            ViewBag.WomenProduct = db.Products.Where(x => x.Category.Name.Equals("Women")).ToList();
+            ViewBag.SportsProduct = db.Products.Where(x => x.Category.Name.Equals("Sports")).ToList();
+            ViewBag.ElectronicsProduct = db.Products.Where(x => x.Category.Name.Equals("Phones")).ToList();
+            ViewBag.Slider = db.MainSliderGenerators.ToList();
+            ViewBag.PromoRight = db.PromoGenerators.ToList();
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+            this.GetDefaultData();
 
             return View();
         }
+
     }
 }
