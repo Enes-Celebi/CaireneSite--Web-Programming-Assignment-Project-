@@ -25,6 +25,12 @@ namespace AdminWeb
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/Content/js").Include(
+              "~/Content/js/jquery.js",
+              "~/Content/js/bootstrap.min.js",
+              "~/Content/js/MyCustom.js"
+              ));
         }
     }
 }

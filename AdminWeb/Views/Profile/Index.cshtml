@@ -1,11 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿@model AdminWeb.Models.Admin
 
-namespace AdminWeb.Views.Profile
-{
-	public class Index
-	{
-	}
+@{
+    ViewBag.Title = "Profile";
 }
+
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+    </dl>
+</div>
+<p class="pull-right">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AdminID }, new { @class = "btn btn-primary" })
+</p>
