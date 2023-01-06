@@ -17,19 +17,19 @@ namespace ClientWeb.Models
         public Category()
         {
             this.Products = new HashSet<Product>();
+            this.PromoGenerators = new HashSet<PromoGenerator>();
             this.SubCategories = new HashSet<SubCategory>();
         }
     
         public int CategoryID { get; set; }
-        public string NameAR { get; set; }
-        public string NameEN { get; set; }
-        public string NameTR { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public string Picture1 { get; set; }
         public string Picture2 { get; set; }
         public Nullable<bool> isActive { get; set; }
     
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<PromoGenerator> PromoGenerators { get; set; }
         public virtual ICollection<SubCategory> SubCategories { get; set; }
     }
 }

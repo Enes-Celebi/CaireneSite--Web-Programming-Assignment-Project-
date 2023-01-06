@@ -12,22 +12,16 @@ namespace ClientWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SubCategory
+    public partial class PromoGenerator
     {
-        public SubCategory()
-        {
-            this.Products = new HashSet<Product>();
-        }
-    
-        public int SubCategoryID { get; set; }
+        public int PromoRightID { get; set; }
         public int CategoryID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Picture1 { get; set; }
-        public string Picture2 { get; set; }
-        public Nullable<bool> isActive { get; set; }
+        public string ImageURL { get; set; }
+        public string AltText { get; set; }
+        public string OfferTag { get; set; }
+        public string Title { get; set; }
+        public Nullable<bool> isDeleted { get; set; }
     
         public virtual Category Category { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace ClientWeb.Models
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<PromoGenerator> PromoGenerators { get; set; }
         public DbSet<RecentView> RecentViews { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ShippingDetail> ShippingDetails { get; set; }

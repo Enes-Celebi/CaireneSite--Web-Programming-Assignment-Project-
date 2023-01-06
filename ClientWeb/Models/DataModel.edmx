@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CaireneStoreDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="AdminID" />
@@ -18,9 +18,7 @@
             <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NameAR" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="NameEN" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="NameTR" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
           <Property Name="Picture1" Type="varchar" MaxLength="255" />
           <Property Name="Picture2" Type="varchar" MaxLength="250" />
@@ -120,9 +118,7 @@
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NameAR" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="NameEN" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="NameTR" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="SupplierID" Type="int" Nullable="false" />
           <Property Name="CategoryID" Type="int" Nullable="false" />
           <Property Name="SubCategoryID" Type="int" />
@@ -147,6 +143,18 @@
           <Property Name="Picture3" Type="varchar" MaxLength="500" />
           <Property Name="Picture4" Type="varchar" MaxLength="500" />
           <Property Name="Note" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="PromoGenerator">
+          <Key>
+            <PropertyRef Name="PromoRightID" />
+          </Key>
+          <Property Name="PromoRightID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="ImageURL" Type="varchar" MaxLength="500" />
+          <Property Name="AltText" Type="varchar" MaxLength="500" />
+          <Property Name="OfferTag" Type="varchar" MaxLength="50" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="RecentViews">
           <Key>
@@ -192,9 +200,11 @@
           </Key>
           <Property Name="SubCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CategoryID" Type="int" Nullable="false" />
-          <Property Name="NameAR" Type="nchar" MaxLength="20" Nullable="false" />
-          <Property Name="NameEN" Type="nchar" MaxLength="20" Nullable="false" />
-          <Property Name="NameTR" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" />
+          <Property Name="Picture1" Type="varchar" MaxLength="500" />
+          <Property Name="Picture2" Type="varchar" MaxLength="500" />
+          <Property Name="isActive" Type="bit" />
         </EntityType>
         <EntityType Name="Suppliers">
           <Key>
@@ -329,6 +339,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PromoGenerator_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="PromoGenerator" Type="Self.PromoGenerator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="PromoGenerator">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RecentViews_Customers">
           <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
           <End Role="RecentViews" Type="Self.RecentViews" Multiplicity="*" />
@@ -401,7 +423,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="DBModelStoreContainer">
+        <EntityContainer Name="CaireneStoreDBModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -411,6 +433,7 @@
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentType" EntityType="Self.PaymentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromoGenerator" EntityType="Self.PromoGenerator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecentViews" EntityType="Self.RecentViews" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Review" EntityType="Self.Review" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShippingDetails" EntityType="Self.ShippingDetails" Schema="dbo" store:Type="Tables" />
@@ -453,6 +476,10 @@
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
+          <AssociationSet Name="FK_PromoGenerator_Categories" Association="Self.FK_PromoGenerator_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="PromoGenerator" EntitySet="PromoGenerator" />
+          </AssociationSet>
           <AssociationSet Name="FK_RecentViews_Customers" Association="Self.FK_RecentViews_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="RecentViews" EntitySet="RecentViews" />
@@ -482,7 +509,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="CaireneStoreDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="AdminID" />
@@ -496,14 +523,13 @@
             <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameAR" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NameEN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NameTR" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Picture1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Picture2" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="isActive" Type="Boolean" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
+          <NavigationProperty Name="PromoGenerators" Relationship="Self.FK_PromoGenerator_Categories" FromRole="Categories" ToRole="PromoGenerator" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategory_Categories" FromRole="Categories" ToRole="SubCategory" />
         </EntityType>
         <EntityType Name="Customer">
@@ -612,9 +638,7 @@
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SupplierID" Type="Int32" Nullable="false" />
           <Property Name="CategoryID" Type="Int32" Nullable="false" />
           <Property Name="SubCategoryID" Type="Int32" />
@@ -646,6 +670,19 @@
           <NavigationProperty Name="RecentViews" Relationship="Self.FK_RecentViews_Products" FromRole="Products" ToRole="RecentViews" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK_Review_Products" FromRole="Products" ToRole="Review" />
           <NavigationProperty Name="Wishlists" Relationship="Self.FK_Wishlist_Products" FromRole="Products" ToRole="Wishlist" />
+        </EntityType>
+        <EntityType Name="PromoGenerator">
+          <Key>
+            <PropertyRef Name="PromoRightID" />
+          </Key>
+          <Property Name="PromoRightID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="ImageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AltText" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="OfferTag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_PromoGenerator_Categories" FromRole="PromoGenerator" ToRole="Categories" />
         </EntityType>
         <EntityType Name="RecentView">
           <Key>
@@ -695,9 +732,11 @@
           </Key>
           <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CategoryID" Type="Int32" Nullable="false" />
-          <Property Name="NameAR" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="NameEN" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="NameTR" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Picture1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Picture2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="isActive" Type="Boolean" />
           <NavigationProperty Name="Category" Relationship="Self.FK_SubCategory_Categories" FromRole="SubCategory" ToRole="Categories" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_SubCategory" FromRole="SubCategory" ToRole="Products" />
         </EntityType>
@@ -737,6 +776,18 @@
               <PropertyRef Name="CategoryID" />
             </Principal>
             <Dependent Role="Products">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PromoGenerator_Categories">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="PromoGenerator" Type="Self.PromoGenerator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="PromoGenerator">
               <PropertyRef Name="CategoryID" />
             </Dependent>
           </ReferentialConstraint>
@@ -919,6 +970,7 @@
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="PaymentTypes" EntityType="Self.PaymentType" />
           <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="PromoGenerators" EntityType="Self.PromoGenerator" />
           <EntitySet Name="RecentViews" EntityType="Self.RecentView" />
           <EntitySet Name="Reviews" EntityType="Self.Review" />
           <EntitySet Name="ShippingDetails" EntityType="Self.ShippingDetail" />
@@ -928,6 +980,10 @@
           <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PromoGenerator_Categories" Association="Self.FK_PromoGenerator_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="PromoGenerator" EntitySet="PromoGenerators" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategory_Categories" Association="Self.FK_SubCategory_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -991,9 +1047,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBEntities">
+        <EntityContainerMapping StorageEntityContainer="CaireneStoreDBModelStoreContainer" CdmEntityContainer="DBEntities">
           <EntitySetMapping Name="Admins">
-            <EntityTypeMapping TypeName="DBModel.Admin">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
                 <ScalarProperty Name="AdminID" ColumnName="AdminID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1002,12 +1058,10 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="DBModel.Category">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Category">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="NameAR" ColumnName="NameAR" />
-                <ScalarProperty Name="NameEN" ColumnName="NameEN" />
-                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Picture1" ColumnName="Picture1" />
                 <ScalarProperty Name="Picture2" ColumnName="Picture2" />
@@ -1016,7 +1070,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="DBModel.Customer">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="First_Name" ColumnName="First Name" />
@@ -1042,7 +1096,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MainSliderGenerators">
-            <EntityTypeMapping TypeName="DBModel.MainSliderGenerator">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.MainSliderGenerator">
               <MappingFragment StoreEntitySet="MainSliderGenerator">
                 <ScalarProperty Name="MainSliderID" ColumnName="MainSliderID" />
                 <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
@@ -1056,7 +1110,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="DBModel.Order">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
@@ -1077,7 +1131,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="DBModel.OrderDetail">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetails">
                 <ScalarProperty Name="OrderDetailsID" ColumnName="OrderDetailsID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -1090,7 +1144,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="DBModel.Payment">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -1102,7 +1156,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PaymentTypes">
-            <EntityTypeMapping TypeName="DBModel.PaymentType">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.PaymentType">
               <MappingFragment StoreEntitySet="PaymentType">
                 <ScalarProperty Name="PayTypeID" ColumnName="PayTypeID" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
@@ -1111,12 +1165,10 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="DBModel.Product">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Product">
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="NameAR" ColumnName="NameAR" />
-                <ScalarProperty Name="NameEN" ColumnName="NameEN" />
-                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
@@ -1144,8 +1196,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PromoGenerators">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.PromoGenerator">
+              <MappingFragment StoreEntitySet="PromoGenerator">
+                <ScalarProperty Name="PromoRightID" ColumnName="PromoRightID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ScalarProperty Name="OfferTag" ColumnName="OfferTag" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="RecentViews">
-            <EntityTypeMapping TypeName="DBModel.RecentView">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.RecentView">
               <MappingFragment StoreEntitySet="RecentViews">
                 <ScalarProperty Name="RecentViewID" ColumnName="RecentViewID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
@@ -1156,7 +1221,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Reviews">
-            <EntityTypeMapping TypeName="DBModel.Review">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Review">
               <MappingFragment StoreEntitySet="Review">
                 <ScalarProperty Name="ReviewID" ColumnName="ReviewID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
@@ -1171,7 +1236,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShippingDetails">
-            <EntityTypeMapping TypeName="DBModel.ShippingDetail">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.ShippingDetail">
               <MappingFragment StoreEntitySet="ShippingDetails">
                 <ScalarProperty Name="ShippingID" ColumnName="ShippingID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -1186,18 +1251,20 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SubCategories">
-            <EntityTypeMapping TypeName="DBModel.SubCategory">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.SubCategory">
               <MappingFragment StoreEntitySet="SubCategory">
                 <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="NameAR" ColumnName="NameAR" />
-                <ScalarProperty Name="NameEN" ColumnName="NameEN" />
-                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Picture1" ColumnName="Picture1" />
+                <ScalarProperty Name="Picture2" ColumnName="Picture2" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Suppliers">
-            <EntityTypeMapping TypeName="DBModel.Supplier">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Supplier">
               <MappingFragment StoreEntitySet="Suppliers">
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
@@ -1214,7 +1281,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Wishlists">
-            <EntityTypeMapping TypeName="DBModel.Wishlist">
+            <EntityTypeMapping TypeName="CaireneStoreDBModel.Wishlist">
               <MappingFragment StoreEntitySet="Wishlist">
                 <ScalarProperty Name="WishlistID" ColumnName="WishlistID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />

@@ -23,9 +23,7 @@ namespace ClientWeb.Models
         }
     
         public int ProductID { get; set; }
-        public string NameAR { get; set; }
-        public string NameEN { get; set; }
-        public string NameTR { get; set; }
+        public string Name { get; set; }
         public int SupplierID { get; set; }
         public int CategoryID { get; set; }
         public Nullable<int> SubCategoryID { get; set; }
