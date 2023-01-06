@@ -1,0 +1,29 @@
+﻿@model ClientWeb.Models.Product
+<li>
+    <figure>
+        <a class="M-product-img" href="@Url.Action("ViewDetails", "Product", new { id = Model.ProductID })"><img src="@Model.ImageURL" alt="@Model.AltText"></a>
+        <a class="M-add-card-btn" href="@(Session["username"] != null ? Url.Action("AddToCart", "Product", new { id = @Model.ProductID}) : Url.Action("Login", "Account"))"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+        <figcaption>
+            <h4 class="M-product-title"><a href="#">@Model.Name</a></h4>
+            <span class="M-product-price">TRY. @Model.UnitPrice</span><span class="M-product-old-price">
+                <del>
+                    @if (Model.OldPrice != null)
+                    {
+                        <text>TRY. @Model.OldPrice</text>}
+                </del>
+            </span>
+        </figcaption>
+    </figure>
+    <div class="M-product-hvr-content">
+        <a href="@(Session["username"]!=null ? Url.Action("WishList","Product", new {id=@Model.ProductID }) :Url.Action("Login","Account"))" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+        <a href="@Url.Action("ViewDetails", "Product", new { id = Model.ProductID })" title="View Details" data-toggle="tooltip" data-placement="top"><span class="fa fa-info"></span></a>
+
+
+    </div>
+    @if (Model.AddBadge == true)
+    {
+        <span class="M-badge  @Model.OfferBadgeClass" href="#">@Model.OfferTitle</span>}
+    @{ TempData["returnURL"] = Request.RawUrl; }
+
+</li>
+
